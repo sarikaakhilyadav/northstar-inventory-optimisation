@@ -70,8 +70,11 @@ public class Main {
         double officeEquipmentRevenue = 0;
 
         double highProfitPerUnit = 0;
-
+        
         Product hightProfitProduct = null;
+
+        double highestTotalProfit = 0;
+        Product highestTotalProfitProduct = null;
 
         for (Product product : products) {
 
@@ -103,6 +106,13 @@ public class Main {
                 hightProfitProduct = product;
             }
 
+            double totalProfit = product.calculateProfitPerUnit() * product.getUnitsSold();
+
+            if(totalProfit > highestTotalProfit){
+                highestTotalProfit = totalProfit;
+                highestTotalProfitProduct = product;
+            }
+
             System.out.println(product.getProductName() + " : " + product.getReorderRecommendation());
 
             totalRevenueGenerated = totalRevenueGenerated + product.calculateRevenueGenerated();
@@ -129,5 +139,9 @@ public class Main {
 
         System.out.println("Highest Profit Product: " + hightProfitProduct.getProductName());
 
+        System.out.println("Highest Total Sales Profit: £" + highestTotalProfit);
+
+        System.out.println("Product with Highest Total Sales Profit: " + highestTotalProfitProduct.getProductName());
+        
     }
 }
