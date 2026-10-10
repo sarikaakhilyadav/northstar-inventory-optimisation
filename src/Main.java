@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
@@ -70,7 +71,7 @@ public class Main {
         double officeEquipmentRevenue = 0;
 
         double highProfitPerUnit = 0;
-        
+
         Product hightProfitProduct = null;
 
         double highestTotalProfit = 0;
@@ -108,7 +109,7 @@ public class Main {
 
             double totalProfit = product.calculateProfitPerUnit() * product.getUnitsSold();
 
-            if(totalProfit > highestTotalProfit){
+            if (totalProfit > highestTotalProfit) {
                 highestTotalProfit = totalProfit;
                 highestTotalProfitProduct = product;
             }
@@ -142,6 +143,25 @@ public class Main {
         System.out.println("Highest Total Sales Profit: £" + highestTotalProfit);
 
         System.out.println("Product with Highest Total Sales Profit: " + highestTotalProfitProduct.getProductName());
-        
+
+        // Rank products by total sales profit
+        products.sort(
+                Comparator.comparingDouble(
+                        (Product product) -> product.calculateProfitPerUnit() * product.getUnitsSold()).reversed());
+
+        System.out.println("\n===== PRODUCT PROFITABILITY RANKING =====");
+
+        int rank = 1;
+
+        for (Product product : products) {
+            double totalProfit = product.calculateProfitPerUnit() * product.getUnitsSold();
+
+            System.out.println(
+                    rank + ". " + product.getProductName()
+                            + " - £" + totalProfit);
+
+            rank++;
+        }
+
     }
 }
