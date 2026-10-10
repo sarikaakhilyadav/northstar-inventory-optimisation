@@ -107,6 +107,16 @@ public class Product {
         }
     }
 
+    public String getInventoryRiskStatus() {
+        if (currentStock <= reorderLevel * 0.5) {
+            return "CRITICAL STOCK";
+        } else if (currentStock < reorderLevel) {
+            return "REORDER REQUIRED";
+        } else {
+            return "HEALTHY STOCK";
+        }
+    }
+
     public double calculateRevenueGenerated() {
         return sellingPrice * unitsSold;
     }

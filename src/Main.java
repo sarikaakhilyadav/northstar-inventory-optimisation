@@ -116,6 +116,8 @@ public class Main {
 
             System.out.println(product.getProductName() + " : " + product.getReorderRecommendation());
 
+            System.out.println(product.getProductName() + " : " + product.getInventoryRiskStatus());
+
             totalRevenueGenerated = totalRevenueGenerated + product.calculateRevenueGenerated();
 
             totalPotentialProfit = totalPotentialProfit + product.calculatePotentialProfit();
