@@ -1,8 +1,13 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
+
+        // ==================================================
+        // 1. CREATE SAMPLE PRODUCTS
+        // ==================================================
+
+        // Create sample products with their prices, stock levels and sales data.
 
         Product laptop = new Product(
                 101,
@@ -54,6 +59,12 @@ public class Main {
                 10,
                 20);
 
+        // ==================================================
+        // 2. STORE PRODUCTS IN A COLLECTION
+        // ==================================================
+
+        // Store all products in one collection for analysis.
+
         ArrayList<Product> products = new ArrayList<>();
 
         products.add(laptop);
@@ -62,22 +73,25 @@ public class Main {
         products.add(monitor);
         products.add(printer);
 
-        double totalRevenueGenerated = 0;
-        double totalPotentialProfit = 0;
-        double totalInventoryCost = 0;
+        // Create the service responsible for inventory analysis.
 
-        double electronicsRevenue = 0;
-        double accessoriesRevenue = 0;
-        double officeEquipmentRevenue = 0;
+        InventoryService service = new InventoryService(products);
 
-        double highProfitPerUnit = 0;
+        InventoryReport report = new InventoryReport();
 
-        Product hightProfitProduct = null;
-
-        double highestTotalProfit = 0;
-        Product highestTotalProfitProduct = null;
+        // ========================================
+        // 6. ANALYSE EACH PRODUCT
+        // ========================================
 
         for (Product product : products) {
+
+            // Calculate reusable product metrics once.
+
+            double profitPerUnit = product.calculateProfitPerUnit();
+
+            String riskStatus = product.getInventoryRiskStatus();
+
+            // Check whether each product needs reordering or is slow-moving.
 
             if (product.isReorderRequired()) {
                 System.out.println(product.getProductName() + " needs reordering");
@@ -87,83 +101,38 @@ public class Main {
                 System.out.println(product.getProductName() + " is slow-moving");
             }
 
-            if (product.getCategory().equals("Electronics")) {
-                electronicsRevenue = electronicsRevenue + product.calculateRevenueGenerated();
-            }
+            // Display the product's profit per unit.
 
-            if (product.getCategory().equals("Accessories")) {
-                accessoriesRevenue = accessoriesRevenue + product.calculateRevenueGenerated();
-            }
+            System.out.printf(
+                    "%s: £%.2f profit per unit%n",
+                    product.getProductName(),
+                    profitPerUnit);
 
-            if (product.getCategory().equals("Office Equipment")) {
-                officeEquipmentRevenue = officeEquipmentRevenue + product.calculateRevenueGenerated();
-            }
-
-            System.out
-                    .println(product.getProductName() + " : £" + product.calculateProfitPerUnit() + " profit per unit");
-
-            if (product.calculateProfitPerUnit() > highProfitPerUnit) {
-                highProfitPerUnit = product.calculateProfitPerUnit();
-                hightProfitProduct = product;
-            }
-
-            double totalProfit = product.calculateProfitPerUnit() * product.getUnitsSold();
-
-            if (totalProfit > highestTotalProfit) {
-                highestTotalProfit = totalProfit;
-                highestTotalProfitProduct = product;
-            }
+            // Display the recommended action and current stock risk status.
 
             System.out.println(product.getProductName() + " : " + product.getReorderRecommendation());
 
-            System.out.println(product.getProductName() + " : " + product.getInventoryRiskStatus());
-
-            totalRevenueGenerated = totalRevenueGenerated + product.calculateRevenueGenerated();
-
-            totalPotentialProfit = totalPotentialProfit + product.calculatePotentialProfit();
-
-            totalInventoryCost = totalInventoryCost + product.calculateInventoryCost();
+            System.out.println(product.getProductName() + " : " + riskStatus);
 
         }
 
-        System.out.println("Electronics Revenue: " + electronicsRevenue);
+        // ==================================================
+        // 7. DISPLAY FINANCIAL SUMMARY
+        // ==================================================
 
-        System.out.println("Accessories Revenue: " + accessoriesRevenue);
+        report.displayFinancialSummary(service);
 
-        System.out.println("Office Equipment Revenue: " + officeEquipmentRevenue);
+        // ==================================================
+        // 8. DISPLAY PRODUCT PROFITABILITY RANKING
+        // ==================================================
 
-        System.out.println("Total Revenue Generated: " + totalRevenueGenerated);
+        report.displayProfitabilityRanking(service);
 
-        System.out.println("Total Potential Profit: " + totalPotentialProfit);
+        // ==================================================
+        // 9. DISPLAY INVENTORY SUMMARY REPORT
+        // ==================================================
 
-        System.out.println("Total Inventory Cost: " + totalInventoryCost);
-
-        System.out.println("Highest Profit Per Unit: £" + highProfitPerUnit);
-
-        System.out.println("Highest Profit Product: " + hightProfitProduct.getProductName());
-
-        System.out.println("Highest Total Sales Profit: £" + highestTotalProfit);
-
-        System.out.println("Product with Highest Total Sales Profit: " + highestTotalProfitProduct.getProductName());
-
-        // Rank products by total sales profit
-        products.sort(
-                Comparator.comparingDouble(
-                        (Product product) -> product.calculateProfitPerUnit() * product.getUnitsSold()).reversed());
-
-        System.out.println("\n===== PRODUCT PROFITABILITY RANKING =====");
-
-        int rank = 1;
-
-        for (Product product : products) {
-            double totalProfit = product.calculateProfitPerUnit() * product.getUnitsSold();
-
-            System.out.println(
-                    rank + ". " + product.getProductName()
-                            + " - £" + totalProfit);
-
-            rank++;
-        }
+        report.displayInventorySummary(service);
 
     }
 }

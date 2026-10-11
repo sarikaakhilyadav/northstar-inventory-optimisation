@@ -1,5 +1,6 @@
 public class Product {
 
+    // Product details and inventory data
     private int productId;
     private String productName;
     private String category;
@@ -8,6 +9,8 @@ public class Product {
     private int currentStock;
     private int reorderLevel;
     private int unitsSold;
+
+    // Initialise a product with its details, prices and stock information.
 
     public Product(int productId, String productName, String category, double costPrice, double sellingPrice,
             int currentStock, int reorderLevel, int unitsSold) {
@@ -21,13 +24,7 @@ public class Product {
         this.unitsSold = unitsSold;
     }
 
-    public int getUnitsSold() {
-        return unitsSold;
-    }
-
-    public void setUnitsSold(int unitsSold) {
-        this.unitsSold = unitsSold;
-    }
+    // Getters and setters for accessing and updating product data.
 
     public int getProductId() {
         return productId;
@@ -85,6 +82,16 @@ public class Product {
         this.reorderLevel = reorderLevel;
     }
 
+    public int getUnitsSold() {
+        return unitsSold;
+    }
+
+    public void setUnitsSold(int unitsSold) {
+        this.unitsSold = unitsSold;
+    }
+
+    // Inventory checks, recommendations and risk assessment.
+
     public boolean isReorderRequired() {
         if (currentStock < reorderLevel) {
             return true;
@@ -117,6 +124,8 @@ public class Product {
         }
     }
 
+    // Financial calculations for revenue, profit and inventory value.
+
     public double calculateRevenueGenerated() {
         return sellingPrice * unitsSold;
     }
@@ -133,4 +142,7 @@ public class Product {
         return costPrice * currentStock;
     }
 
+    public double calculateTotalSalesProfit() {
+        return calculateProfitPerUnit() * unitsSold;
+    }
 }
