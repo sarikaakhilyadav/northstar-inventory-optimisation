@@ -14,6 +14,27 @@ public class Product {
 
     public Product(int productId, String productName, String category, double costPrice, double sellingPrice,
             int currentStock, int reorderLevel, int unitsSold) {
+
+        if (productId <= 0) {
+            throw new IllegalArgumentException("Product ID must be positive.");
+        }
+
+        if (productName == null || productName.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be empty.");
+        }
+
+        if (category == null || category.isBlank()) {
+            throw new IllegalArgumentException("Product category cannot be empty.");
+        }
+
+        if (costPrice < 0 || sellingPrice < 0) {
+            throw new IllegalArgumentException("Product prices cannot be negative.");
+        }
+
+        if (currentStock < 0 || reorderLevel < 0 || unitsSold < 0) {
+            throw new IllegalArgumentException("Stock, reorder level and units sold cannot be negative.");
+        }
+
         this.productId = productId;
         this.productName = productName;
         this.category = category;
