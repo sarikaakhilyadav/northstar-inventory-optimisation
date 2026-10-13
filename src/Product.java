@@ -166,4 +166,17 @@ public class Product {
     public double calculateTotalSalesProfit() {
         return calculateProfitPerUnit() * unitsSold;
     }
+
+    public String getInventoryRiskExplanation() {
+        if (currentStock <= reorderLevel * 0.5) {
+            return "Stock is critically low. Replenishment should be prioritised.";
+        }
+
+        if (currentStock < reorderLevel) {
+            return "Stock is below the reorder level. Consider replenishment.";
+        }
+
+        return "Stock is at or above the reorder level.";
+    }
+
 }
