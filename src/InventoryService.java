@@ -140,4 +140,31 @@ public class InventoryService {
         return new ArrayList<>(products);
     }
 
+    public Product findProductById(int productId) {
+
+        for (Product product : products) {
+
+            if (product.getProductId() == productId) {
+                return product;
+            }
+        }
+
+        return null;
+    }
+
+    public void addProduct(Product product) {
+
+        if (product == null) {
+            throw new IllegalArgumentException(
+                    "Product cannot be null.");
+        }
+
+        if (findProductById(product.getProductId()) != null) {
+            throw new IllegalArgumentException(
+                    "A product with this ID already exists.");
+        }
+
+        products.add(product);
+    }
+
 }
