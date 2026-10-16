@@ -179,4 +179,52 @@ public class InventoryService {
         return true;
     }
 
+    public boolean restockProduct(int productId, int quantity) {
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "Restock quantity must be greater than zero.");
+        }
+
+        Product product = findProductById(productId);
+
+        if (product == null) {
+            return false;
+        }
+
+        product.setCurrentStock(
+                Math.addExact(product.getCurrentStock(), quantity));
+
+        return true;
+    }
+
+    public boolean recordSale(int productId, int quantity) {
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "Sale quantity must be greater than zero.");
+        }
+
+        Product product = findProductById(productId);
+
+        if (product == null) {
+            return false;
+        }
+
+        if (quantity > product.getCurrentStock()) {
+            throw new IllegalArgumentException(
+                    "Insufficient stock to complete the sale.");
+        }
+
+        int updatedUnitsSold = Math.addExact(
+                product.getUnitsSold(), quantity);
+
+        product.setCurrentStock(
+                product.getCurrentStock() - quantity);
+
+        product.setUnitsSold(updatedUnitsSold);
+
+        return true;
+    }
+
 }

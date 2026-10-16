@@ -77,6 +77,35 @@ public class Main {
 
                 InventoryService service = new InventoryService(products);
 
+                boolean restocked = service.restockProduct(101, 12);
+
+                if (restocked) {
+                        Product restockedLaptop = service.findProductById(101);
+
+                        System.out.println("Laptop restocked successfully.");
+                        System.out.println("Updated stock: " + restockedLaptop.getCurrentStock());
+                        System.out.println("Inventory status: " + restockedLaptop.getInventoryRiskStatus());
+                } else {
+                        System.out.println("Product not found.");
+                }
+
+                System.out.println();
+
+                boolean saleRecorded = service.recordSale(101, 3);
+
+                if (saleRecorded) {
+                        Product soldLaptop = service.findProductById(101);
+
+                        System.out.println("Laptop sale recorded successfully.");
+                        System.out.println("Remaining stock: " + soldLaptop.getCurrentStock());
+                        System.out.println("Total units sold: " + soldLaptop.getUnitsSold());
+                        System.out.println("Inventory status: " + soldLaptop.getInventoryRiskStatus());
+                } else {
+                        System.out.println("Product not found.");
+                }
+
+                System.out.println();
+
                 Product newProduct = new Product(
                                 106, "USB-C Hub", "Accessories",
                                 15, 30, 25, 10, 60);
@@ -85,14 +114,6 @@ public class Main {
 
                 System.out.println("Product added: " + newProduct.getProductName());
                 System.out.println("Total products: " + service.getProducts().size());
-
-                Product foundProduct = service.findProductById(999);
-
-                if (foundProduct != null) {
-                        System.out.println("Product found: " + foundProduct.getProductName());
-                } else {
-                        System.out.println("Product not found.");
-                }
 
                 InventoryReport report = new InventoryReport();
 
