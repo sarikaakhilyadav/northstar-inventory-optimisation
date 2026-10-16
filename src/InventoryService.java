@@ -167,4 +167,16 @@ public class InventoryService {
         products.add(product);
     }
 
+    public boolean removeProductById(int productId) {
+
+        Product product = findProductById(productId);
+
+        if (product == null) {
+            return false;
+        }
+
+        products.remove(product);
+        return true;
+    }
+
 }

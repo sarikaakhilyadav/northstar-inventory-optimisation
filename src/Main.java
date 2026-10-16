@@ -77,6 +77,15 @@ public class Main {
 
                 InventoryService service = new InventoryService(products);
 
+                Product newProduct = new Product(
+                                106, "USB-C Hub", "Accessories",
+                                15, 30, 25, 10, 60);
+
+                service.addProduct(newProduct);
+
+                System.out.println("Product added: " + newProduct.getProductName());
+                System.out.println("Total products: " + service.getProducts().size());
+
                 Product foundProduct = service.findProductById(999);
 
                 if (foundProduct != null) {
