@@ -1,13 +1,16 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InventoryServiceTest {
 
-    @Test
-    void shouldRestockProductSuccessfully() {
+    private Product laptop;
+    private InventoryService service;
 
-        // Arrange: Create a Laptop with 8 units in stock
-        Product laptop = new Product(
+    @BeforeEach
+    void setUp() {
+
+        laptop = new Product(
                 101,
                 "Laptop",
                 "Electronics",
@@ -17,9 +20,14 @@ public class InventoryServiceTest {
                 10,
                 42);
 
-        InventoryService service = new InventoryService(new java.util.ArrayList<Product>());
+        service = new InventoryService(
+                new java.util.ArrayList<Product>());
 
         service.addProduct(laptop);
+    }
+
+    @Test
+    void shouldRestockProductSuccessfully() {
 
         // Act: Restock 12 units
         boolean result = service.restockProduct(101, 12);
@@ -32,25 +40,10 @@ public class InventoryServiceTest {
     @Test
     void shouldRecordSaleSuccessfully() {
 
-        // Arrange
-        Product laptop = new Product(
-                101,
-                "Laptop",
-                "Electronics",
-                450.0,
-                650.0,
-                8,
-                10,
-                42);
-
-        InventoryService service = new InventoryService(new java.util.ArrayList<Product>());
-
-        service.addProduct(laptop);
-
-        // Act
+        // Act: Sell 3 Laptops
         boolean result = service.recordSale(101, 3);
 
-        // Assert
+        // Assert: Verify the sale
         assertTrue(result);
         assertEquals(5, laptop.getCurrentStock());
         assertEquals(45, laptop.getUnitsSold());
@@ -59,22 +52,8 @@ public class InventoryServiceTest {
     @Test
     void shouldRejectSaleWhenStockIsInsufficient() {
 
-        // Arrange
-        Product laptop = new Product(
-                101,
-                "Laptop",
-                "Electronics",
-                450.0,
-                650.0,
-                8,
-                10,
-                42);
-
-        InventoryService service = new InventoryService(new java.util.ArrayList<Product>());
-
-        service.addProduct(laptop);
-
-        // Act and Assert
+        // Act and Assert: Attempt to sell 10 units
+        // when only 8 are available
         assertThrows(IllegalArgumentException.class, () -> {
             service.recordSale(101, 10);
         });
@@ -87,22 +66,7 @@ public class InventoryServiceTest {
     @Test
     void shouldRejectZeroQuantitySale() {
 
-        // Arrange
-        Product laptop = new Product(
-                101,
-                "Laptop",
-                "Electronics",
-                450.0,
-                650.0,
-                8,
-                10,
-                42);
-
-        InventoryService service = new InventoryService(new java.util.ArrayList<Product>());
-
-        service.addProduct(laptop);
-
-        // Act and Assert
+        // Act and Assert: Attempt to sell zero units
         assertThrows(IllegalArgumentException.class, () -> {
             service.recordSale(101, 0);
         });
@@ -115,22 +79,7 @@ public class InventoryServiceTest {
     @Test
     void shouldRejectNegativeQuantitySale() {
 
-        // Arrange
-        Product laptop = new Product(
-                101,
-                "Laptop",
-                "Electronics",
-                450.0,
-                650.0,
-                8,
-                10,
-                42);
-
-        InventoryService service = new InventoryService(new java.util.ArrayList<Product>());
-
-        service.addProduct(laptop);
-
-        // Act and Assert
+        // Act and Assert: Attempt to sell -5 units
         assertThrows(IllegalArgumentException.class, () -> {
             service.recordSale(101, -5);
         });
