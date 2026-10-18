@@ -1,6 +1,15 @@
+package com.northstar.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "products")
 public class Product {
 
     // Product details and inventory data
+    @Id
     private int productId;
     private String productName;
     private String category;
@@ -11,6 +20,10 @@ public class Product {
     private int unitsSold;
 
     // Initialise a product with its details, prices and stock information.
+
+    protected Product() {
+        // Required by JPA when loading products from the database.
+    }
 
     public Product(int productId, String productName, String category, double costPrice, double sellingPrice,
             int currentStock, int reorderLevel, int unitsSold) {

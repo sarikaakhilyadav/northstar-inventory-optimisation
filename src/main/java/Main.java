@@ -1,3 +1,5 @@
+import com.northstar.service.InventoryService;
+import com.northstar.model.Product;
 import java.util.ArrayList;
 
 public class Main {
