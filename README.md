@@ -42,11 +42,27 @@ The Spring Boot backend and Angular dashboard are implemented and integrated. Ad
 - Node.js and npm
 - MySQL 8
 
+
 ### 1. Database Setup
 
-Create a MySQL database named `northstar_inventory` and configure the required products table.
+NorthStar uses MySQL 8 to store product and inventory information.
 
-The application uses environment variables for database credentials. Do not commit passwords to GitHub.
+Two SQL scripts are provided in the `database/` directory:
+
+- `schema.sql` — Creates the database and products table if they do not already exist.
+- `sample-data.sql` — Adds seven sample products, skipping records with matching IDs or product names.
+
+To set up the database:
+
+1. Open MySQL Workbench and connect to your MySQL server.
+2. Open `database/schema.sql` and execute it.
+3. Open `database/sample-data.sql` and execute it.
+4. Confirm that the `northstar_inventory` database contains the `products` table.
+
+The backend connects using the `DB_USERNAME` and `DB_PASSWORD` environment variables.
+
+Use a MySQL account with appropriate permissions for the database. Never commit database passwords or other credentials to GitHub.
+
 
 ### 2. Start the Backend
 
