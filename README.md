@@ -103,3 +103,29 @@ The Angular development server proxies API requests to the Spring Boot backend.
 - Selling a product reduces available stock and increases units sold.
 - Restocking increases available stock.
 - Sales exceeding available stock are rejected with HTTP 409 Conflict.
+
+## Application Screenshots
+
+### 1. Business Performance Dashboard
+
+Overview of key business metrics, including revenue, inventory cost, and potential profit.
+
+![NorthStar Business Performance Dashboard](screenshots/northstar-dashboard.png)
+
+### 2. Revenue Analytics and Inventory Risks
+
+Revenue analysis by category, stock-out risks, and reorder alerts.
+
+![NorthStar Revenue Analytics and Inventory Risks](screenshots/northstar-analytics.png)
+
+### 3. Inventory Priorities and Product Management
+
+Inventory priority analysis and product stock management.
+
+![NorthStar Inventory Management](screenshots/northstar-inventory.png)
+
+### 4. Add New Product
+
+Product creation form with pricing, stock quantities, and reorder settings.
+
+![NorthStar Add New Product Form](screenshots/northstar-add-product.png)
