@@ -54,7 +54,7 @@ Two SQL scripts are provided in the `database/` directory:
 
 To set up the database:
 
-1. Open MySQL Workbench and connect to your MySQL server.
+1. Open MySQL Workbench and connect using a MySQL account with permission to create databases and tables. Run the setup scripts using that account. The Spring Boot application can then connect using a separate account with permissions on the `northstar_inventory` database.
 2. Open `database/schema.sql` and execute it.
 3. Open `database/sample-data.sql` and execute it.
 4. Confirm that the `northstar_inventory` database contains the `products` table.
