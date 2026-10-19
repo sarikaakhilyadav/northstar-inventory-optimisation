@@ -4,12 +4,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 @Entity
 @Table(name = "products")
 public class Product {
 
     // Product details and inventory data
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
     private String productName;
     private String category;
@@ -49,6 +54,41 @@ public class Product {
         }
 
         this.productId = productId;
+        this.productName = productName;
+        this.category = category;
+        this.costPrice = costPrice;
+        this.sellingPrice = sellingPrice;
+        this.currentStock = currentStock;
+        this.reorderLevel = reorderLevel;
+        this.unitsSold = unitsSold;
+    }
+
+    public Product(
+            String productName,
+            String category,
+            double costPrice,
+            double sellingPrice,
+            int currentStock,
+            int reorderLevel,
+            int unitsSold) {
+
+        if (productName == null || productName.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be empty.");
+        }
+
+        if (category == null || category.isBlank()) {
+            throw new IllegalArgumentException("Product category cannot be empty.");
+        }
+
+        if (costPrice < 0 || sellingPrice < 0) {
+            throw new IllegalArgumentException("Product prices cannot be negative.");
+        }
+
+        if (currentStock < 0 || reorderLevel < 0 || unitsSold < 0) {
+            throw new IllegalArgumentException(
+                    "Stock, reorder level and units sold cannot be negative.");
+        }
+
         this.productName = productName;
         this.category = category;
         this.costPrice = costPrice;

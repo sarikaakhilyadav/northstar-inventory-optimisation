@@ -64,14 +64,7 @@ public class InventoryService {
 
     public Product createProduct(ProductRequest request) {
 
-        if (productRepository.existsById(request.productId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Product ID already exists: " + request.productId());
-        }
-
         Product product = new Product(
-                request.productId(),
                 request.productName(),
                 request.category(),
                 request.costPrice(),

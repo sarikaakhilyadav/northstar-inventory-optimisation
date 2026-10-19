@@ -1,0 +1,358 @@
+<div class="dashboard">
+  <header class="dashboard-header">
+    <h1>NorthStar Inventory Dashboard</h1>
+
+    <button type="button" class="refresh-button" (click)="refreshDashboard()">
+      ↻ Refresh Dashboard
+    </button>
+    <p>Inventory Optimisation & Stock-Out Prevention Platform</p>
+  </header>
+
+  <main class="dashboard-content">
+    <section class="welcome-section">
+      <h2>Inventory Overview</h2>
+      <p>
+        Monitor stock levels, track revenue, and identify
+        inventory risks before they affect your business.
+      </p>
+    </section>
+
+    <section class="dashboard-summary">
+      <h2>Business Performance</h2>
+
+      @if (loading()) {
+      <p>Loading inventory analytics...</p>
+      } @else if (error()) {
+      <p class="error-message">{{ error() }}</p>
+      } @else if (analytics(); as data) {
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <h3>Total Products</h3>
+          <p class="kpi-value">{{ data.totalProducts }}</p>
+        </div>
+
+        <div class="kpi-card">
+          <h3>Total Revenue</h3>
+          <p class="kpi-value">
+            {{ data.totalRevenue.toLocaleString('en-GB', {
+            style: 'currency',
+            currency: 'GBP',
+            maximumFractionDigits: 0
+            }) }}
+          </p>
+        </div>
+
+        <div class="kpi-card">
+          <h3>Inventory Cost</h3>
+          <p class="kpi-value">
+            {{ data.totalInventoryCost.toLocaleString('en-GB', {
+            style: 'currency',
+            currency: 'GBP',
+            maximumFractionDigits: 0
+            }) }}
+          </p>
+        </div>
+
+        <div class="kpi-card">
+          <h3>Potential Profit</h3>
+          <p class="kpi-value">
+            {{ data.totalPotentialProfit.toLocaleString('en-GB', {
+            style: 'currency',
+            currency: 'GBP',
+            maximumFractionDigits: 0
+            }) }}
+          </p>
+        </div>
+
+        <div class="kpi-card">
+          <h3>Reorder Alerts</h3>
+          <p class="kpi-value">{{ data.productsRequiringReorder }}</p>
+        </div>
+
+        <div class="kpi-card">
+          <h3>Slow-Moving Products</h3>
+          <p class="kpi-value">{{ data.slowMovingProducts }}</p>
+        </div>
+      </div>
+      }
+    </section>
+
+
+    <section class="dashboard-summary">
+      <h2>Revenue by Category</h2>
+      <p>Compare revenue performance across product categories.</p>
+
+      <div class="revenue-chart">
+        @for (item of categoryRevenue(); track item.category) {
+        <div class="revenue-row">
+          <div class="revenue-details">
+            <span>{{ item.category }}</span>
+            <strong>
+              {{ item.revenue.toLocaleString('en-GB', {
+              style: 'currency',
+              currency: 'GBP',
+              maximumFractionDigits: 0
+              }) }}
+            </strong>
+          </div>
+
+          <div class="revenue-track">
+            <div class="revenue-bar" [style.width.%]="getRevenuePercentage(item.revenue)">
+            </div>
+          </div>
+        </div>
+        } @empty {
+        <p>No category revenue data available.</p>
+        }
+      </div>
+    </section>
+
+
+    <section class="dashboard-summary">
+      <h2>Inventory Risk & Reorder Alerts</h2>
+      <p>
+        Identify products requiring attention and review
+        recommended inventory actions.
+      </p>
+
+      <div class="table-container">
+        <table class="risk-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Current Stock</th>
+              <th>Reorder Level</th>
+              <th>Units Sold</th>
+              <th>Risk Status</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (product of inventoryRisks(); track product.productId) {
+            <tr>
+              <td>{{ product.productName }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.currentStock }}</td>
+              <td>{{ product.reorderLevel }}</td>
+              <td>{{ product.unitsSold }}</td>
+
+              <td>
+                <span class="risk-badge" [class.risk-high]="product.riskStatus === 'REORDER REQUIRED'"
+                  [class.risk-healthy]="product.riskStatus === 'HEALTHY STOCK'">
+                  {{ product.riskStatus }}
+                </span>
+              </td>
+
+              <td>{{ product.recommendation }}</td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="7">No inventory risks found.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <section class="dashboard-summary">
+      <h2>Inventory Priority Analysis</h2>
+      <p>
+        Prioritise inventory decisions based on stock levels
+        and sales performance.
+      </p>
+
+      <div class="table-container">
+        <table class="risk-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Current Stock</th>
+              <th>Units Sold</th>
+              <th>Priority</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (product of inventoryPriorities(); track product.productId) {
+            <tr>
+              <td>{{ product.productName }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.currentStock }}</td>
+              <td>{{ product.unitsSold }}</td>
+
+              <td>
+                <span class="risk-badge" [class.risk-high]="product.priority === 'HIGH'"
+                  [class.risk-medium]="product.priority === 'MEDIUM'" [class.risk-healthy]="product.priority === 'LOW'">
+                  {{ product.priority }}
+                </span>
+              </td>
+
+              <td>{{ product.reason }}</td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="6">No inventory priorities found.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="dashboard-summary">
+      <h2>Product Inventory Management</h2>
+      <p>
+        View product details, pricing, stock levels,
+        and sales performance.
+      </p>
+
+      <div class="table-container">
+        <table class="risk-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Cost Price</th>
+              <th>Selling Price</th>
+              <th>Current Stock</th>
+              <th>Reorder Level</th>
+              <th>Units Sold</th>
+              <th>Stock Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (product of products(); track product.productId) {
+            <tr>
+              <td>{{ product.productId }}</td>
+              <td><strong>{{ product.productName }}</strong></td>
+              <td>{{ product.category }}</td>
+
+              <td>
+                {{ product.costPrice.toLocaleString('en-GB', {
+                style: 'currency',
+                currency: 'GBP'
+                }) }}
+              </td>
+
+              <td>
+                {{ product.sellingPrice.toLocaleString('en-GB', {
+                style: 'currency',
+                currency: 'GBP'
+                }) }}
+              </td>
+
+              <td>{{ product.currentStock }}</td>
+              <td>{{ product.reorderLevel }}</td>
+              <td>{{ product.unitsSold }}</td>
+
+              <td>
+                @if (product.currentStock < product.reorderLevel) { <span class="risk-badge risk-high">
+                  Low Stock
+                  </span>
+                  } @else {
+                  <span class="risk-badge risk-healthy">
+                    In Stock
+                  </span>
+                  }
+              </td>
+              <td>
+                <div class="product-actions">
+                  <button type="button" class="restock-button" (click)="restockProduct(product)">
+                    Restock
+                  </button>
+
+                  <button type="button" class="sell-button" [disabled]="product.currentStock === 0"
+                    (click)="sellProduct(product)">
+                    Sell
+                  </button>
+                </div>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="10">No products available.</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="add-product-section">
+      <h2>Add New Product</h2>
+
+
+      <form (ngSubmit)="addNewProduct()">
+        <div class="form-group">
+          <label for="productName">Product Name</label>
+
+          <input id="productName" type="text" name="productName" [(ngModel)]="newProduct.productName"
+            placeholder="Enter product name" required />
+        </div>
+
+        <!-- Product Category -->
+        <div class="form-group">
+          <label for="category">Product Category</label>
+
+          <input id="category" type="text" name="category" [(ngModel)]="newProduct.category"
+            placeholder="e.g. Electronics" required />
+        </div>
+
+        <!-- Cost Price -->
+        <div class="form-group">
+          <label for="costPrice">Cost Price (£)</label>
+
+          <input id="costPrice" type="number" name="costPrice" [(ngModel)]="newProduct.costPrice" min="0" step="0.01"
+            required />
+        </div>
+
+        <!-- Selling Price -->
+        <div class="form-group">
+          <label for="sellingPrice">Selling Price (£)</label>
+
+          <input id="sellingPrice" type="number" name="sellingPrice" [(ngModel)]="newProduct.sellingPrice" min="0"
+            step="0.01" required />
+        </div>
+
+        <!-- Current Stock -->
+        <div class="form-group">
+          <label for="currentStock">Current Stock</label>
+
+          <input id="currentStock" type="number" name="currentStock" [(ngModel)]="newProduct.currentStock" min="0"
+            step="1" required />
+        </div>
+
+        <!-- Reorder Level -->
+        <div class="form-group">
+          <label for="reorderLevel">Reorder Level</label>
+
+          <input id="reorderLevel" type="number" name="reorderLevel" [(ngModel)]="newProduct.reorderLevel" min="0"
+            step="1" required />
+        </div>
+
+        <!-- Units Sold -->
+        <div class="form-group">
+          <label for="unitsSold">Units Sold</label>
+
+          <input id="unitsSold" type="number" name="unitsSold" [(ngModel)]="newProduct.unitsSold" min="0" step="1"
+            required />
+        </div>
+
+        <button type="submit" class="add-product-button">
+          + Add Product
+        </button>
+
+      </form>
+    </section>
+
+  </main>
+</div>
