@@ -145,3 +145,28 @@ Inventory priority analysis and product stock management.
 Product creation form with pricing, stock quantities, and reorder settings.
 
 ![NorthStar Add New Product Form](screenshots/northstar-add-product.png)
+
+
+
+## Testing & Verification
+
+The application has been tested locally to verify its core functionality and database integration.
+
+### Backend Verification
+- Successfully executed the Maven test suite using `mvn test`.
+- Verified REST API operations for product creation, retrieval and deletion.
+- Tested stock replenishment and sales operations through the Angular dashboard.
+
+### Frontend Verification
+- Successfully built the Angular application using `npm run build`.
+- Verified that the dashboard displays inventory records, business KPIs, category revenue and inventory risk indicators.
+- Tested the Add Product, Restock and Sell features.
+
+### Database Verification
+- Verified MySQL connectivity and persistent product records.
+- Tested the database table structure in a separate test database.
+- Successfully inserted seven sample products using the SQL seed script.
+- Confirmed that running the sample-data script twice does not create duplicate products.
+
+### Testing Scope
+Testing was performed in a local development environment. Automated end-to-end browser tests and production deployment testing have not yet been completed.
