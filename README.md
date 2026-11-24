@@ -170,3 +170,14 @@ The application has been tested locally to verify its core functionality and dat
 
 ### Testing Scope
 Testing was performed in a local development environment. Automated end-to-end browser tests and production deployment testing have not yet been completed.
+
+
+## Future Enhancements
+
+Planned improvements focus on inventory operations
+and software reliability:
+
+- Supplier and purchase order management.
+- Stock movement history and audit logs.
+- Role-based authentication and access control.
+- Automated integration and end-to-end tests.
